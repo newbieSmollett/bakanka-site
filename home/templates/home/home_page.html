@@ -1,21 +1,28 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "core/base.html" %}
+{% load wagtailcore_tags %}
 
-{% block body_class %}template-homepage{% endblock %}
+{% block title %}
+    {% if page.seo_title_custom %}
+        {{ page.seo_title_custom }}
+    {% else %}
+        {{ page.title }}
+    {% endif %}
+{% endblock %}
 
-{% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
-{% endblock extra_css %}
+{% block meta_description %}
+    {% if page.seo_description %}
+        {{ page.seo_description }}
+    {% else %}
+        Прием и утилизация отходов в Новороссийске
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% include 'home/welcome_page.html' %}
-
-{% endblock content %}
+<section>
+    <div>
+        <h1>{{ page.title }}</h1>
+        <p>Главная страница сайта компании по приему и утилизации отходов.</p>
+        <p>Шаблон подключен успешно.</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% load static wagtailcore_tags %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Сайт компании{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Прием и утилизация отходов{% endblock %}">
+
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="site-container">
+            <div class="site-header">
+                <a href="/" class="site-logo">Новороссийск</a>
+
+                <nav class="site-nav">
+                    <a href="/">Главная</a>
+                    <a href="#">Услуги</a>
+                    <a href="#">Цены</a>
+                    <a href="#">О компании</a>
+                    <a href="#">Контакты</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="site-container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="site-container">
+            <div class="site-footer">
+                <p>© Прием и утилизация отходов в Новороссийске</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
