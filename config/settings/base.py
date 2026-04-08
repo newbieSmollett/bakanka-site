@@ -29,6 +29,7 @@ load_dotenv(BASE_DIR / ".env")
 INSTALLED_APPS = [
     "home",
     "search",
+    "core",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
