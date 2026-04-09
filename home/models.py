@@ -6,6 +6,13 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 
 
+def get_client_ip(request):
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
+
+
 @register_setting(icon="cog")
 class SiteContactSettings(BaseSiteSetting):
     company_name = models.CharField(
@@ -51,6 +58,18 @@ class SiteContactSettings(BaseSiteSetting):
 
 
 class Lead(models.Model):
+    STATUS_NEW = "new"
+    STATUS_IN_PROGRESS = "in_progress"
+    STATUS_DONE = "done"
+    STATUS_REJECTED = "rejected"
+
+    STATUS_CHOICES = [
+        (STATUS_NEW, "Новая"),
+        (STATUS_IN_PROGRESS, "В работе"),
+        (STATUS_DONE, "Обработана"),
+        (STATUS_REJECTED, "Отклонена"),
+    ]
+
     company = models.CharField(
         max_length=255,
         blank=True,
@@ -74,13 +93,29 @@ class Lead(models.Model):
         default="homepage",
         verbose_name="Источник",
     )
+    page_url = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="URL страницы",
+    )
+    ip_address = models.GenericIPAddressField(
+        blank=True,
+        null=True,
+        verbose_name="IP-адрес",
+    )
+    user_agent = models.TextField(
+        blank=True,
+        verbose_name="User-Agent",
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_NEW,
+        verbose_name="Статус",
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата создания",
-    )
-    is_processed = models.BooleanField(
-        default=False,
-        verbose_name="Обработано",
     )
 
     class Meta:
@@ -432,6 +467,70 @@ class HomePage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+        context.setdefault(
+            "form_data",
+            {
+                "company": "",
+                "name": "",
+                "phone": "",
+                "comment": "",
+            },
+        )
+        context.setdefault("form_errors", {})
+        context.setdefault("form_success", False)
+        return context
+
+    def serve(self, request):
+        if request.method != "POST":
+            return super().serve(request)
+
+        company = request.POST.get("company", "").strip()
+        name = request.POST.get("name", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        comment = request.POST.get("comment", "").strip()
+
+        form_data = {
+            "company": company,
+            "name": name,
+            "phone": phone,
+            "comment": comment,
+        }
+        form_errors = {}
+
+        if not name:
+            form_errors["name"] = "Укажите контактное лицо."
+        elif len(name) < 2:
+            form_errors["name"] = "Имя слишком короткое."
+
+        if not phone:
+            form_errors["phone"] = "Укажите телефон."
+        else:
+            phone_digits = "".join(ch for ch in phone if ch.isdigit())
+            if len(phone_digits) < 10:
+                form_errors["phone"] = "Введите корректный телефон."
+
+        if form_errors:
+            context = self.get_context(request)
+            context["form_data"] = form_data
+            context["form_errors"] = form_errors
+            context["form_success"] = False
+            return render(request, "home/home_page.html", context)
+
+        normalized_phone = "".join(ch for ch in phone if ch.isdigit() or ch == "+")
+
+        Lead.objects.create(
+            company=company,
+            name=name,
+            phone=normalized_phone,
+            comment=comment,
+            source="homepage",
+            page_url=request.build_absolute_uri(),
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
+
+        context = self.get_context(request)
+        context["form_success"] = True
         context["form_data"] = {
             "company": "",
             "name": "",
@@ -439,52 +538,4 @@ class HomePage(Page):
             "comment": "",
         }
         context["form_errors"] = {}
-        context["form_success"] = False
-        return context
-
-    def serve(self, request):
-        if request.method == "POST":
-            company = request.POST.get("company", "").strip()
-            name = request.POST.get("name", "").strip()
-            phone = request.POST.get("phone", "").strip()
-            comment = request.POST.get("comment", "").strip()
-
-            form_data = {
-                "company": company,
-                "name": name,
-                "phone": phone,
-                "comment": comment,
-            }
-            form_errors = {}
-
-            if not name:
-                form_errors["name"] = "Укажите контактное лицо."
-            if not phone:
-                form_errors["phone"] = "Укажите телефон."
-
-            if form_errors:
-                context = self.get_context(request)
-                context["form_data"] = form_data
-                context["form_errors"] = form_errors
-                context["form_success"] = False
-                return render(request, "home/home_page.html", context)
-
-            Lead.objects.create(
-                company=company,
-                name=name,
-                phone=phone,
-                comment=comment,
-                source="homepage",
-            )
-
-            context = self.get_context(request)
-            context["form_success"] = True
-            context["form_data"] = {
-                "company": "",
-                "name": "",
-                "phone": "",
-                "comment": "",
-            }
-            return render(request, "home/home_page.html", context)
-
-        return super().serve(request)
+        return render(request, "home/home_page.html", context)
