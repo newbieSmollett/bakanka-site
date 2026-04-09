@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import render
 
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
@@ -47,6 +48,49 @@ class SiteContactSettings(BaseSiteSetting):
 
     class Meta:
         verbose_name = "Контакты сайта"
+
+
+class Lead(models.Model):
+    company = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Компания",
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name="Контактное лицо",
+    )
+    phone = models.CharField(
+        max_length=100,
+        verbose_name="Телефон",
+    )
+    comment = models.TextField(
+        blank=True,
+        verbose_name="Комментарий",
+    )
+    source = models.CharField(
+        max_length=100,
+        blank=True,
+        default="homepage",
+        verbose_name="Источник",
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+    is_processed = models.BooleanField(
+        default=False,
+        verbose_name="Обработано",
+    )
+
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявки"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        company_part = f" / {self.company}" if self.company else ""
+        return f"{self.name} — {self.phone}{company_part}"
 
 
 class HomePage(Page):
@@ -385,3 +429,62 @@ class HomePage(Page):
 
     class Meta:
         verbose_name = "Главная страница"
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["form_data"] = {
+            "company": "",
+            "name": "",
+            "phone": "",
+            "comment": "",
+        }
+        context["form_errors"] = {}
+        context["form_success"] = False
+        return context
+
+    def serve(self, request):
+        if request.method == "POST":
+            company = request.POST.get("company", "").strip()
+            name = request.POST.get("name", "").strip()
+            phone = request.POST.get("phone", "").strip()
+            comment = request.POST.get("comment", "").strip()
+
+            form_data = {
+                "company": company,
+                "name": name,
+                "phone": phone,
+                "comment": comment,
+            }
+            form_errors = {}
+
+            if not name:
+                form_errors["name"] = "Укажите контактное лицо."
+            if not phone:
+                form_errors["phone"] = "Укажите телефон."
+
+            if form_errors:
+                context = self.get_context(request)
+                context["form_data"] = form_data
+                context["form_errors"] = form_errors
+                context["form_success"] = False
+                return render(request, "home/home_page.html", context)
+
+            Lead.objects.create(
+                company=company,
+                name=name,
+                phone=phone,
+                comment=comment,
+                source="homepage",
+            )
+
+            context = self.get_context(request)
+            context["form_success"] = True
+            context["form_data"] = {
+                "company": "",
+                "name": "",
+                "phone": "",
+                "comment": "",
+            }
+            return render(request, "home/home_page.html", context)
+
+        return super().serve(request)

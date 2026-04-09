@@ -643,4 +643,24 @@ button {
     .hero-btn {
         width: 100%;
     }
+
+    .form-message {
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    }
+
+    .form-message-success {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    }
+
+    .form-error {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #fecaca;
+    }
+
 }
