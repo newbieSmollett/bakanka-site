@@ -1,9 +1,10 @@
 from django.db import models
 from django.shortcuts import render
 
-from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
+
+from core.models import BasePage
 
 
 def get_client_ip(request):
@@ -128,20 +129,8 @@ class Lead(models.Model):
         return f"{self.name} — {self.phone}{company_part}"
 
 
-class HomePage(Page):
+class HomePage(BasePage):
     max_count = 1
-
-    seo_title_custom = models.CharField(
-        max_length=255,
-        blank=True,
-        verbose_name="SEO Title",
-        help_text="Если заполнено, будет использоваться вместо стандартного title страницы.",
-    )
-    seo_description = models.TextField(
-        blank=True,
-        verbose_name="SEO Description",
-        help_text="Краткое описание страницы для поисковых систем.",
-    )
 
     hero_badge = models.CharField(
         max_length=255,
@@ -383,14 +372,7 @@ class HomePage(Page):
         verbose_name="Текст блока заявки",
     )
 
-    content_panels = Page.content_panels + [
-        MultiFieldPanel(
-            [
-                FieldPanel("seo_title_custom"),
-                FieldPanel("seo_description"),
-            ],
-            heading="SEO",
-        ),
+    content_panels = BasePage.content_panels + [
         MultiFieldPanel(
             [
                 FieldPanel("hero_badge"),
@@ -516,7 +498,16 @@ class HomePage(Page):
             context["form_success"] = False
             return render(request, "home/home_page.html", context)
 
-        normalized_phone = "".join(ch for ch in phone if ch.isdigit() or ch == "+")
+        phone_digits = "".join(ch for ch in phone if ch.isdigit())
+
+        if phone_digits.startswith("8"):
+            phone_digits = "7" + phone_digits[1:]
+
+        if not phone_digits.startswith("7"):
+            phone_digits = "7" + phone_digits
+
+        phone_digits = phone_digits[:11]
+        normalized_phone = "+" + phone_digits
 
         Lead.objects.create(
             company=company,
