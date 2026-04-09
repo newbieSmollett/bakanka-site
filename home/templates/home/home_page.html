@@ -22,14 +22,14 @@
 {
   "@context": "https://schema.org",
   "@type": ["Organization", "LocalBusiness"],
-  "name": "{{ page.company_name|escapejs }}",
+  "name": "{{ settings.home.SiteContactSettings.company_name|default:'ООО «Баканка»'|escapejs }}",
   "url": "{{ request.scheme }}://{{ request.get_host }}{{ page.url }}",
-  "telephone": "{{ page.company_phone|escapejs }}",
-  "email": "{{ page.company_email|escapejs }}",
+  "telephone": "{{ settings.home.SiteContactSettings.phone|default:'+7 (999) 999-99-99'|escapejs }}",
+  "email": "{{ settings.home.SiteContactSettings.email|default:'info@example.com'|escapejs }}",
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "{{ page.company_city|escapejs }}",
-    "streetAddress": "{{ page.company_address|escapejs }}",
+    "addressLocality": "{{ settings.home.SiteContactSettings.city|default:'Новороссийск'|escapejs }}",
+    "streetAddress": "{{ settings.home.SiteContactSettings.address|default:'Краснодарский край, станица Нижнебаканская'|escapejs }}",
     "addressCountry": "RU"
   }
 }
@@ -40,48 +40,82 @@
 <section class="hero-section">
     <div class="hero-grid">
         <div class="hero-content">
-            <span class="hero-badge">{{ page.hero_badge }}</span>
+            {% if page.hero_badge %}
+                <span class="hero-badge">{{ page.hero_badge }}</span>
+            {% endif %}
 
             <h1 class="hero-title">{{ page.hero_title }}</h1>
 
-            <p class="hero-description">{{ page.hero_description }}</p>
+            {% if page.hero_description %}
+                <p class="hero-description">{{ page.hero_description }}</p>
+            {% endif %}
 
             <div class="hero-buttons">
-                <a href="{{ page.hero_primary_button_link }}" class="hero-btn hero-btn-primary">
-                    {{ page.hero_primary_button_text }}
-                </a>
-                <a href="{{ page.hero_secondary_button_link }}" class="hero-btn hero-btn-secondary">
-                    {{ page.hero_secondary_button_text }}
-                </a>
+                {% if page.hero_primary_button_text and page.hero_primary_button_link %}
+                    <a href="{{ page.hero_primary_button_link }}" class="hero-btn hero-btn-primary">
+                        {{ page.hero_primary_button_text }}
+                    </a>
+                {% endif %}
+
+                {% if page.hero_secondary_button_text and page.hero_secondary_button_link %}
+                    <a href="{{ page.hero_secondary_button_link }}" class="hero-btn hero-btn-secondary">
+                        {{ page.hero_secondary_button_text }}
+                    </a>
+                {% endif %}
             </div>
 
             <div class="hero-features">
-                <div class="hero-feature-card">
-                    <strong>{{ page.feature_1_title }}</strong>
-                    <span>{{ page.feature_1_text }}</span>
-                </div>
-                <div class="hero-feature-card">
-                    <strong>{{ page.feature_2_title }}</strong>
-                    <span>{{ page.feature_2_text }}</span>
-                </div>
-                <div class="hero-feature-card">
-                    <strong>{{ page.feature_3_title }}</strong>
-                    <span>{{ page.feature_3_text }}</span>
-                </div>
+                {% if page.feature_1_title or page.feature_1_text %}
+                    <div class="hero-feature-card">
+                        {% if page.feature_1_title %}
+                            <strong>{{ page.feature_1_title }}</strong>
+                        {% endif %}
+                        {% if page.feature_1_text %}
+                            <span>{{ page.feature_1_text }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if page.feature_2_title or page.feature_2_text %}
+                    <div class="hero-feature-card">
+                        {% if page.feature_2_title %}
+                            <strong>{{ page.feature_2_title }}</strong>
+                        {% endif %}
+                        {% if page.feature_2_text %}
+                            <span>{{ page.feature_2_text }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if page.feature_3_title or page.feature_3_text %}
+                    <div class="hero-feature-card">
+                        {% if page.feature_3_title %}
+                            <strong>{{ page.feature_3_title }}</strong>
+                        {% endif %}
+                        {% if page.feature_3_text %}
+                            <span>{{ page.feature_3_text }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </div>
 
         <div class="hero-visual">
             <div class="hero-panel">
                 <div class="hero-panel-inner">
-                    <span class="hero-panel-label">{{ page.panel_label }}</span>
-                    <h2>{{ page.panel_title }}</h2>
+                    {% if page.panel_label %}
+                        <span class="hero-panel-label">{{ page.panel_label }}</span>
+                    {% endif %}
+
+                    {% if page.panel_title %}
+                        <h2>{{ page.panel_title }}</h2>
+                    {% endif %}
 
                     <ul class="hero-panel-list">
-                        <li>{{ page.panel_item_1 }}</li>
-                        <li>{{ page.panel_item_2 }}</li>
-                        <li>{{ page.panel_item_3 }}</li>
-                        <li>{{ page.panel_item_4 }}</li>
+                        {% if page.panel_item_1 %}<li>{{ page.panel_item_1 }}</li>{% endif %}
+                        {% if page.panel_item_2 %}<li>{{ page.panel_item_2 }}</li>{% endif %}
+                        {% if page.panel_item_3 %}<li>{{ page.panel_item_3 }}</li>{% endif %}
+                        {% if page.panel_item_4 %}<li>{{ page.panel_item_4 }}</li>{% endif %}
                     </ul>
                 </div>
             </div>
@@ -93,7 +127,9 @@
     <div class="section-heading">
         <span class="section-label">Услуги</span>
         <h2>{{ page.services_section_title }}</h2>
-        <p>{{ page.services_section_text }}</p>
+        {% if page.services_section_text %}
+            <p>{{ page.services_section_text }}</p>
+        {% endif %}
     </div>
 
     <div class="cards-grid cards-grid-4">
@@ -121,7 +157,9 @@
         <div class="about-content">
             <span class="section-label">О компании</span>
             <h2>{{ page.about_title }}</h2>
-            <p>{{ page.about_text }}</p>
+            {% if page.about_text %}
+                <p>{{ page.about_text }}</p>
+            {% endif %}
         </div>
 
         <div class="about-stats">
@@ -146,7 +184,9 @@
         <div class="request-content">
             <span class="section-label section-label-light">Заявка</span>
             <h2>{{ page.request_title }}</h2>
-            <p>{{ page.request_text }}</p>
+            {% if page.request_text %}
+                <p>{{ page.request_text }}</p>
+            {% endif %}
         </div>
 
         <form class="request-form" method="post">

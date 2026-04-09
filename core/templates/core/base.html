@@ -17,7 +17,13 @@
     <header class="site-header-wrap">
         <div class="site-container">
             <div class="site-header">
-                <a href="/" class="site-logo">Новороссийск</a>
+                <a href="/" class="site-logo">
+                    {% if settings.home.SiteContactSettings.city %}
+                        {{ settings.home.SiteContactSettings.city }}
+                    {% else %}
+                        Новороссийск
+                    {% endif %}
+                </a>
 
                 <nav class="site-nav" aria-label="Основная навигация">
                     <a href="/">Главная</a>
@@ -27,9 +33,9 @@
                     <a href="#contacts">Контакты</a>
                 </nav>
 
-                {% if page.company_phone %}
-                    <a href="tel:{{ page.company_phone }}" class="site-phone">
-                        {{ page.company_phone }}
+                {% if settings.home.SiteContactSettings.phone %}
+                    <a href="tel:{{ settings.home.SiteContactSettings.phone }}" class="site-phone">
+                        {{ settings.home.SiteContactSettings.phone }}
                     </a>
                 {% endif %}
             </div>
@@ -45,7 +51,26 @@
     <footer class="site-footer-wrap" id="contacts">
         <div class="site-container">
             <div class="site-footer">
-                <p>© Прием и утилизация отходов в Новороссийске</p>
+                <p>
+                    ©
+                    {% if settings.home.SiteContactSettings.company_name %}
+                        {{ settings.home.SiteContactSettings.company_name }}
+                    {% else %}
+                        Прием и утилизация отходов в Новороссийске
+                    {% endif %}
+                </p>
+
+                {% if settings.home.SiteContactSettings.address %}
+                    <p>{{ settings.home.SiteContactSettings.address }}</p>
+                {% endif %}
+
+                {% if settings.home.SiteContactSettings.email %}
+                    <p>
+                        <a href="mailto:{{ settings.home.SiteContactSettings.email }}">
+                            {{ settings.home.SiteContactSettings.email }}
+                        </a>
+                    </p>
+                {% endif %}
             </div>
         </div>
     </footer>
