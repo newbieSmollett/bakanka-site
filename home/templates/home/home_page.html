@@ -250,57 +250,129 @@
             {% endif %}
         </div>
 
-        <form class="request-form" method="post" novalidate>
-            {% csrf_token %}
+        <div class="request-form-area">
+            <form class="request-form" method="post" novalidate>
+                {% csrf_token %}
 
-            {% if form_success %}
-                <div class="form-message form-message-success">
-                    Спасибо. Заявка отправлена, мы свяжемся с вами.
+                <div>
+                    <input
+                        type="text"
+                        name="company"
+                        placeholder="Название компании"
+                        value="{{ form_data.company|default:'' }}"
+                    >
                 </div>
-            {% endif %}
 
-            <div>
-                <input
-                    type="text"
-                    name="company"
-                    placeholder="Название компании"
-                    value="{{ form_data.company|default:'' }}"
-                >
-            </div>
+                <div>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Контактное лицо"
+                        value="{{ form_data.name|default:'' }}"
+                    >
+                    {% if form_errors.name %}
+                        <div class="form-error">{{ form_errors.name }}</div>
+                    {% endif %}
+                </div>
 
-            <div>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Контактное лицо"
-                    value="{{ form_data.name|default:'' }}"
-                >
-                {% if form_errors.name %}
-                    <div class="form-error">{{ form_errors.name }}</div>
-                {% endif %}
-            </div>
+                <div>
+                    <input
+                        type="text"
+                        name="phone"
+                        placeholder="Телефон"
+                        value="{{ form_data.phone|default:'' }}"
+                    >
+                    {% if form_errors.phone %}
+                        <div class="form-error">{{ form_errors.phone }}</div>
+                    {% endif %}
+                </div>
 
-            <div>
-                <input
-                    type="text"
-                    name="phone"
-                    placeholder="Телефон"
-                    value="{{ form_data.phone|default:'' }}"
-                >
-                {% if form_errors.phone %}
-                    <div class="form-error">{{ form_errors.phone }}</div>
-                {% endif %}
-            </div>
+                <div>
+                    <textarea
+                        name="comment"
+                        placeholder="Кратко опишите задачу"
+                    >{{ form_data.comment|default:'' }}</textarea>
+                </div>
 
-            <div>
-                <textarea
-                    name="comment"
-                    placeholder="Кратко опишите задачу"
-                >{{ form_data.comment|default:'' }}</textarea>
-            </div>
-
-            <button type="submit">Отправить заявку</button>
-        </form>
+                <button type="submit">Отправить заявку</button>
+            </form>
+        </div>
     </div>
 </section>
+
+{% if form_success %}
+<div class="lead-modal" id="lead-success-modal" role="dialog" aria-modal="true" aria-labelledby="lead-success-title">
+    <div class="lead-modal__backdrop"></div>
+
+    <div class="lead-modal__dialog">
+        <button class="lead-modal__close" type="button" aria-label="Закрыть уведомление">×</button>
+
+        <div class="lead-modal__badge">Заявка отправлена</div>
+
+        <h3 class="lead-modal__title" id="lead-success-title">
+            Спасибо, мы получили ваш запрос
+        </h3>
+
+        <p class="lead-modal__text">
+            Наш специалист свяжется с вами для уточнения деталей и подготовки предложения.
+        </p>
+
+        <div class="lead-modal__actions">
+            <button class="lead-modal__button" type="button">Понятно</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {% if form_success %}
+    <script>
+        window.addEventListener('load', function () {
+            const requestSection = document.getElementById('request');
+            const modal = document.getElementById('lead-success-modal');
+            const closeButton = document.querySelector('.lead-modal__close');
+            const confirmButton = document.querySelector('.lead-modal__button');
+            const backdrop = document.querySelector('.lead-modal__backdrop');
+
+            if (requestSection) {
+                requestSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+
+            if (modal) {
+                setTimeout(function () {
+                    modal.classList.add('is-visible');
+                }, 500);
+            }
+
+            function closeModal() {
+                if (modal) {
+                    modal.classList.remove('is-visible');
+                }
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
+
+            if (confirmButton) {
+                confirmButton.addEventListener('click', closeModal);
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', closeModal);
+            }
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+    {% endif %}
 {% endblock %}
