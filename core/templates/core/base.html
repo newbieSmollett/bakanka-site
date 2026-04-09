@@ -17,12 +17,12 @@
     <header class="site-header-wrap">
         <div class="site-container">
             <div class="site-header">
-                <a href="/" class="site-logo">
-                    {% if settings.home.SiteContactSettings.city %}
-                        {{ settings.home.SiteContactSettings.city }}
-                    {% else %}
-                        Новороссийск
-                    {% endif %}
+                <a href="/" class="site-logo" aria-label="На главную">
+                    <img
+                        src="{% static 'core/images/logo.png' %}"
+                        alt="{% if settings.home.SiteContactSettings.company_name %}{{ settings.home.SiteContactSettings.company_name }}{% else %}Логотип компании{% endif %}"
+                        class="site-logo-image"
+                    >
                 </a>
 
                 <nav class="site-nav" aria-label="Основная навигация">
