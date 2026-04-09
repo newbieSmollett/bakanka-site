@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.db import models
 from django.shortcuts import render
 
@@ -509,7 +511,7 @@ class HomePage(BasePage):
         phone_digits = phone_digits[:11]
         normalized_phone = "+" + phone_digits
 
-        Lead.objects.create(
+        lead = Lead.objects.create(
             company=company,
             name=name,
             phone=normalized_phone,
@@ -519,6 +521,31 @@ class HomePage(BasePage):
             ip_address=get_client_ip(request),
             user_agent=request.META.get("HTTP_USER_AGENT", ""),
         )
+
+        subject = f"Новая заявка с сайта: {name}"
+        message = (
+            f"Новая заявка с сайта.\n\n"
+            f"Компания: {company or '—'}\n"
+            f"Контактное лицо: {name}\n"
+            f"Телефон: {normalized_phone}\n"
+            f"Комментарий: {comment or '—'}\n"
+            f"Источник: homepage\n"
+            f"URL страницы: {request.build_absolute_uri()}\n"
+            f"IP: {get_client_ip(request) or '—'}\n"
+            f"User-Agent: {request.META.get('HTTP_USER_AGENT', '') or '—'}\n"
+            f"ID заявки: {lead.id}\n"
+        )
+
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.LEAD_NOTIFICATION_EMAIL],
+                fail_silently=False,
+            )
+        except Exception:
+            pass
 
         context = self.get_context(request)
         context["form_success"] = True

@@ -17,7 +17,10 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
 
 try:
     from .local import *
