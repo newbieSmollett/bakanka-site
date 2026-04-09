@@ -17,12 +17,146 @@
     {% endif %}
 {% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["Organization", "LocalBusiness"],
+  "name": "{{ page.company_name|escapejs }}",
+  "url": "{{ request.scheme }}://{{ request.get_host }}{{ page.url }}",
+  "telephone": "{{ page.company_phone|escapejs }}",
+  "email": "{{ page.company_email|escapejs }}",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "{{ page.company_city|escapejs }}",
+    "streetAddress": "{{ page.company_address|escapejs }}",
+    "addressCountry": "RU"
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
-<section>
-    <div>
-        <h1>{{ page.title }}</h1>
-        <p>Главная страница сайта компании по приему и утилизации отходов.</p>
-        <p>Шаблон подключен успешно.</p>
+<section class="hero-section">
+    <div class="hero-grid">
+        <div class="hero-content">
+            <span class="hero-badge">{{ page.hero_badge }}</span>
+
+            <h1 class="hero-title">{{ page.hero_title }}</h1>
+
+            <p class="hero-description">{{ page.hero_description }}</p>
+
+            <div class="hero-buttons">
+                <a href="{{ page.hero_primary_button_link }}" class="hero-btn hero-btn-primary">
+                    {{ page.hero_primary_button_text }}
+                </a>
+                <a href="{{ page.hero_secondary_button_link }}" class="hero-btn hero-btn-secondary">
+                    {{ page.hero_secondary_button_text }}
+                </a>
+            </div>
+
+            <div class="hero-features">
+                <div class="hero-feature-card">
+                    <strong>{{ page.feature_1_title }}</strong>
+                    <span>{{ page.feature_1_text }}</span>
+                </div>
+                <div class="hero-feature-card">
+                    <strong>{{ page.feature_2_title }}</strong>
+                    <span>{{ page.feature_2_text }}</span>
+                </div>
+                <div class="hero-feature-card">
+                    <strong>{{ page.feature_3_title }}</strong>
+                    <span>{{ page.feature_3_text }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-panel">
+                <div class="hero-panel-inner">
+                    <span class="hero-panel-label">{{ page.panel_label }}</span>
+                    <h2>{{ page.panel_title }}</h2>
+
+                    <ul class="hero-panel-list">
+                        <li>{{ page.panel_item_1 }}</li>
+                        <li>{{ page.panel_item_2 }}</li>
+                        <li>{{ page.panel_item_3 }}</li>
+                        <li>{{ page.panel_item_4 }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-section" id="services">
+    <div class="section-heading">
+        <span class="section-label">Услуги</span>
+        <h2>{{ page.services_section_title }}</h2>
+        <p>{{ page.services_section_text }}</p>
+    </div>
+
+    <div class="cards-grid cards-grid-4">
+        <article class="info-card">
+            <h3>{{ page.service_1_title }}</h3>
+            <p>{{ page.service_1_text }}</p>
+        </article>
+        <article class="info-card">
+            <h3>{{ page.service_2_title }}</h3>
+            <p>{{ page.service_2_text }}</p>
+        </article>
+        <article class="info-card">
+            <h3>{{ page.service_3_title }}</h3>
+            <p>{{ page.service_3_text }}</p>
+        </article>
+        <article class="info-card">
+            <h3>{{ page.service_4_title }}</h3>
+            <p>{{ page.service_4_text }}</p>
+        </article>
+    </div>
+</section>
+
+<section class="content-section" id="about">
+    <div class="about-block">
+        <div class="about-content">
+            <span class="section-label">О компании</span>
+            <h2>{{ page.about_title }}</h2>
+            <p>{{ page.about_text }}</p>
+        </div>
+
+        <div class="about-stats">
+            <div class="stat-card">
+                <strong>{{ page.stat_1_title }}</strong>
+                <span>{{ page.stat_1_text }}</span>
+            </div>
+            <div class="stat-card">
+                <strong>{{ page.stat_2_title }}</strong>
+                <span>{{ page.stat_2_text }}</span>
+            </div>
+            <div class="stat-card">
+                <strong>{{ page.stat_3_title }}</strong>
+                <span>{{ page.stat_3_text }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-section" id="request">
+    <div class="request-block">
+        <div class="request-content">
+            <span class="section-label section-label-light">Заявка</span>
+            <h2>{{ page.request_title }}</h2>
+            <p>{{ page.request_text }}</p>
+        </div>
+
+        <form class="request-form" method="post">
+            {% csrf_token %}
+            <input type="text" name="company" placeholder="Название компании">
+            <input type="text" name="name" placeholder="Контактное лицо">
+            <input type="text" name="phone" placeholder="Телефон">
+            <textarea name="comment" placeholder="Кратко опишите задачу"></textarea>
+            <button type="submit">Отправить заявку</button>
+        </form>
     </div>
 </section>
 {% endblock %}

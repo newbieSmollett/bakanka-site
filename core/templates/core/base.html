@@ -14,29 +14,35 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header>
+    <header class="site-header-wrap">
         <div class="site-container">
             <div class="site-header">
                 <a href="/" class="site-logo">Новороссийск</a>
 
-                <nav class="site-nav">
+                <nav class="site-nav" aria-label="Основная навигация">
                     <a href="/">Главная</a>
-                    <a href="#">Услуги</a>
+                    <a href="#services">Услуги</a>
                     <a href="#">Цены</a>
-                    <a href="#">О компании</a>
-                    <a href="#">Контакты</a>
+                    <a href="#about">О компании</a>
+                    <a href="#contacts">Контакты</a>
                 </nav>
+
+                {% if page.company_phone %}
+                    <a href="tel:{{ page.company_phone }}" class="site-phone">
+                        {{ page.company_phone }}
+                    </a>
+                {% endif %}
             </div>
         </div>
     </header>
 
-    <main>
+    <main class="site-main">
         <div class="site-container">
             {% block content %}{% endblock %}
         </div>
     </main>
 
-    <footer>
+    <footer class="site-footer-wrap" id="contacts">
         <div class="site-container">
             <div class="site-footer">
                 <p>© Прием и утилизация отходов в Новороссийске</p>
