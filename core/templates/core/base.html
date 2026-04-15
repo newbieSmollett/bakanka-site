@@ -25,19 +25,21 @@
                     >
                 </a>
 
-                <nav class="site-nav" aria-label="Основная навигация">
-                    <a href="/">Главная</a>
-                    <a href="#services">Услуги</a>
-                    <a href="#">Цены</a>
-                    <a href="#about">О компании</a>
-                    <a href="#contacts">Контакты</a>
-                </nav>
+                <div class="site-header-controls">
+                    <nav class="site-nav" aria-label="Основная навигация">
+                        <a href="/">Главная</a>
+                        <a href="#services">Услуги</a>
+                        <a href="#">Цены</a>
+                        <a href="#about">О компании</a>
+                        <a href="#contacts">Контакты</a>
+                    </nav>
 
-                {% if settings.home.SiteContactSettings.phone %}
-                    <a href="tel:{{ settings.home.SiteContactSettings.phone }}" class="site-phone">
-                        {{ settings.home.SiteContactSettings.phone }}
-                    </a>
-                {% endif %}
+                    {% if settings.home.SiteContactSettings.phone %}
+                        <a href="tel:{{ settings.home.SiteContactSettings.phone }}" class="site-phone">
+                            {{ settings.home.SiteContactSettings.phone }}
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </header>
@@ -75,6 +77,27 @@
         </div>
     </footer>
 
-    {% block extra_js %}{% endblock %}
+    {% block extra_js %}
+    <script>
+        window.addEventListener('load', function () {
+            const header = document.querySelector('.site-header-wrap');
+
+            if (!header) {
+                return;
+            }
+
+            function toggleScrolledHeader() {
+                if (window.scrollY > 20) {
+                    header.classList.add('is-scrolled');
+                } else {
+                    header.classList.remove('is-scrolled');
+                }
+            }
+
+            toggleScrolledHeader();
+            window.addEventListener('scroll', toggleScrolledHeader, { passive: true });
+        });
+    </script>
+    {% endblock %}
 </body>
 </html>
