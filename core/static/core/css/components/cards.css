@@ -1,0 +1,60 @@
+.hero-feature-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    box-shadow: var(--shadow-md);
+}
+
+.hero-feature-card strong {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--color-text);
+    font-size: 16px;
+    line-height: 1.35;
+}
+
+.hero-feature-card span {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.info-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+}
+
+.info-card h3 {
+    margin: 0 0 14px;
+    font-size: 22px;
+    line-height: 1.25;
+    color: var(--color-text);
+}
+
+.info-card p {
+    margin: 0;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #ecfdf5, #dcfce7);
+    border: 1px solid rgba(21, 128, 61, 0.10);
+    border-radius: var(--radius-md);
+    padding: 24px;
+}
+
+.stat-card strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 24px;
+    color: #14532d;
+}
+
+.stat-card span {
+    color: var(--color-text-soft);
+}

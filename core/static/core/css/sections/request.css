@@ -1,0 +1,22 @@
+.request-block {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 460px;
+    gap: 30px;
+    padding: 42px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, #115e59, #15803d);
+    color: var(--color-white);
+    box-shadow: var(--shadow-lg);
+}
+
+.request-content h2 {
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+}
+
+.request-content p {
+    max-width: 620px;
+    color: rgba(255, 255, 255, 0.90);
+    font-size: 17px;
+    line-height: 1.72;
+}

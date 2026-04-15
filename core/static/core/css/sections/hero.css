@@ -1,0 +1,134 @@
+.hero-section {
+    padding: 38px 0 72px;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(360px, 0.88fr);
+    gap: 56px;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 760px;
+}
+
+.hero-badge {
+    display: inline-block;
+    margin-bottom: 24px;
+    padding: 11px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.hero-title {
+    margin: 0 0 22px;
+    font-size: clamp(46px, 6vw, 82px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    color: var(--color-text);
+}
+
+.hero-title span {
+    display: block;
+    color: var(--color-primary);
+}
+
+.hero-description {
+    max-width: 720px;
+    margin: 0 0 30px;
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--color-text-soft);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 34px;
+}
+
+.hero-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.hero-visual {
+    display: flex;
+    justify-content: center;
+}
+
+.hero-panel {
+    width: 100%;
+    max-width: 520px;
+    min-height: 560px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(
+        160deg,
+        var(--color-primary-dark) 0%,
+        var(--color-primary) 55%,
+        var(--color-primary-light) 100%
+    );
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-panel::before {
+    content: "";
+    position: absolute;
+    inset: 24px;
+    border-radius: 26px;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.18),
+        rgba(255, 255, 255, 0.05)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.hero-panel-inner {
+    position: absolute;
+    left: 32px;
+    right: 32px;
+    bottom: 32px;
+    z-index: 2;
+    color: var(--color-white);
+}
+
+.hero-panel-label {
+    display: inline-block;
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.92;
+}
+
+.hero-panel h2 {
+    margin: 0 0 22px;
+    font-size: 34px;
+    line-height: 1.1;
+}
+
+.hero-panel-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.hero-panel-list li {
+    padding: 13px 16px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}

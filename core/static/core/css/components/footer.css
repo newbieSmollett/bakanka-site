@@ -1,0 +1,18 @@
+.site-footer-wrap {
+    margin-top: 56px;
+    background: #e5e7eb;
+    padding: 28px 0;
+}
+
+.site-footer {
+    font-size: 14px;
+    color: #374151;
+}
+
+.site-footer p {
+    margin: 0 0 8px;
+}
+
+.site-footer p:last-child {
+    margin-bottom: 0;
+}
