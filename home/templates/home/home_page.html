@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load wagtailcore_tags %}
+{% load static wagtailcore_tags %}
 
 {% block title %}
     {% if page.seo_title_custom %}
@@ -117,14 +117,55 @@
                         <h2>{{ page.panel_title }}</h2>
                     {% endif %}
 
-                    {% if page.panel_item_1 or page.panel_item_2 or page.panel_item_3 or page.panel_item_4 %}
-                        <ul class="hero-panel-list">
-                            {% if page.panel_item_1 %}<li>{{ page.panel_item_1 }}</li>{% endif %}
-                            {% if page.panel_item_2 %}<li>{{ page.panel_item_2 }}</li>{% endif %}
-                            {% if page.panel_item_3 %}<li>{{ page.panel_item_3 }}</li>{% endif %}
-                            {% if page.panel_item_4 %}<li>{{ page.panel_item_4 }}</li>{% endif %}
-                        </ul>
-                    {% endif %}
+                    <div class="haul-widget" aria-label="Цикл вывоза">
+                        <div class="haul-widget__top">
+                            <span class="haul-widget__badge">Цикл вывоза</span>
+                            <span class="haul-widget__status">Приём заявок открыт</span>
+                        </div>
+
+                        <div class="haul-widget__stages">
+                            <div class="haul-widget__stage is-active" data-stage="0">
+                                <span class="haul-widget__dot"></span>
+                                <span class="haul-widget__text">Заявка</span>
+                            </div>
+                            <div class="haul-widget__stage" data-stage="1">
+                                <span class="haul-widget__dot"></span>
+                                <span class="haul-widget__text">Подбор техники</span>
+                            </div>
+                            <div class="haul-widget__stage" data-stage="2">
+                                <span class="haul-widget__dot"></span>
+                                <span class="haul-widget__text">Вывоз</span>
+                            </div>
+                            <div class="haul-widget__stage" data-stage="3">
+                                <span class="haul-widget__dot"></span>
+                                <span class="haul-widget__text">Документы</span>
+                            </div>
+                        </div>
+
+                        <div class="haul-widget__road">
+                            <div class="haul-widget__road-line"></div>
+                            <div class="haul-widget__progress"></div>
+
+                            <div class="haul-widget__truck" id="haul-truck" aria-hidden="true">
+                                <img
+                                    src="{% static 'core/images/shacman-widget.png' %}"
+                                    alt=""
+                                    class="haul-widget__truck-image"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="haul-widget__meta">
+                            <div class="haul-widget__meta-card">
+                                <span class="haul-widget__meta-label">Техника</span>
+                                <strong>Shacman / Kamaz</strong>
+                            </div>
+                            <div class="haul-widget__meta-card">
+                                <span class="haul-widget__meta-label">Формат</span>
+                                <strong>по графику и под объект</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -528,6 +569,23 @@
                 });
             }
 
+            const haulStages = document.querySelectorAll('.haul-widget__stage');
+
+            if (haulStages.length) {
+                let currentStage = 0;
+
+                function updateHaulStages() {
+                    haulStages.forEach((stage, index) => {
+                        stage.classList.toggle('is-active', index === currentStage);
+                    });
+
+                    currentStage = (currentStage + 1) % haulStages.length;
+                }
+
+                updateHaulStages();
+                setInterval(updateHaulStages, 2000);
+            }
+
             {% if form_success %}
             const modal = document.getElementById('lead-success-modal');
             const closeButton = document.querySelector('.lead-modal__close');
@@ -566,4 +624,4 @@
             {% endif %}
         });
     </script>
-{% endblock %}
+{% endblock %} 

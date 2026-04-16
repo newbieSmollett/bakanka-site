@@ -77,25 +77,81 @@
         </div>
     </footer>
 
+    <<div class="cookie-consent" id="cookie-consent">
+        <div class="cookie-consent__inner">
+            <div class="cookie-consent__content">
+                <div class="cookie-consent__title">Мы используем cookie</div>
+                <div class="cookie-consent__text">
+                    Сайт использует cookie-файлы для корректной работы, аналитики и улучшения пользовательского опыта.
+                    Продолжая пользоваться сайтом, вы соглашаетесь с их использованием.
+                </div>
+            </div>
+
+            <div class="cookie-consent__actions">
+                <button type="button" class="cookie-consent__btn cookie-consent__btn--ghost" id="cookie-decline">
+                    Только необходимые
+                </button>
+                <button type="button" class="cookie-consent__btn cookie-consent__btn--primary" id="cookie-accept">
+                    Принять
+                </button>
+            </div>
+        </div>
+    </div>
+
     {% block extra_js %}
     <script>
         window.addEventListener('load', function () {
             const header = document.querySelector('.site-header-wrap');
+            const cookieBanner = document.getElementById('cookie-consent');
+            const cookieAccept = document.getElementById('cookie-accept');
+            const cookieDecline = document.getElementById('cookie-decline');
+            const cookieStorageKey = 'bakanka_cookie_consent';
 
-            if (!header) {
-                return;
+            if (header) {
+                function toggleScrolledHeader() {
+                    if (window.scrollY > 20) {
+                        header.classList.add('is-scrolled');
+                    } else {
+                        header.classList.remove('is-scrolled');
+                    }
+                }
+
+                toggleScrolledHeader();
+                window.addEventListener('scroll', toggleScrolledHeader, { passive: true });
             }
 
-            function toggleScrolledHeader() {
-                if (window.scrollY > 20) {
-                    header.classList.add('is-scrolled');
-                } else {
-                    header.classList.remove('is-scrolled');
+            if (cookieBanner) {
+                const savedChoice = localStorage.getItem(cookieStorageKey);
+
+                if (!savedChoice) {
+                    cookieBanner.hidden = false;
+
+                    setTimeout(function () {
+                        cookieBanner.classList.add('is-visible');
+                    }, 200);
+                }
+
+                function closeCookieBanner(value) {
+                    localStorage.setItem(cookieStorageKey, value);
+                    cookieBanner.classList.remove('is-visible');
+
+                    setTimeout(function () {
+                        cookieBanner.hidden = true;
+                    }, 350);
+                }
+
+                if (cookieAccept) {
+                    cookieAccept.addEventListener('click', function () {
+                        closeCookieBanner('accepted');
+                    });
+                }
+
+                if (cookieDecline) {
+                    cookieDecline.addEventListener('click', function () {
+                        closeCookieBanner('necessary');
+                    });
                 }
             }
-
-            toggleScrolledHeader();
-            window.addEventListener('scroll', toggleScrolledHeader, { passive: true });
         });
     </script>
     {% endblock %}
