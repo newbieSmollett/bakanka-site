@@ -1,0 +1,183 @@
+{% extends "core/base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}
+    {% if page.seo_title_custom %}
+        {{ page.seo_title_custom }}
+    {% else %}
+        {{ page.title }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if page.seo_description %}
+        {{ page.seo_description }}
+    {% else %}
+        {{ page.hero_description }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="service-page">
+    <section class="service-hero-section">
+        <div class="service-hero-grid">
+            <div class="service-hero-content">
+                {% if page.hero_badge %}
+                    <span class="service-hero-badge">{{ page.hero_badge }}</span>
+                {% endif %}
+
+                {% if page.hero_title %}
+                    <h1 class="service-hero-title">{{ page.hero_title }}</h1>
+                {% else %}
+                    <h1 class="service-hero-title">{{ page.title }}</h1>
+                {% endif %}
+
+                {% if page.hero_description %}
+                    <p class="service-hero-description">{{ page.hero_description }}</p>
+                {% endif %}
+
+                <div class="service-hero-buttons">
+                    <a href="#request" class="hero-btn hero-btn-primary">Получить расчёт</a>
+                    <a href="/#services" class="hero-btn hero-btn-secondary">Все услуги</a>
+                </div>
+            </div>
+
+            <div class="service-hero-visual">
+                <div class="service-hero-panel">
+                    {% if page.hero_image %}
+                        {% image page.hero_image fill-760x620 class="service-hero-image" alt=page.title %}
+                    {% else %}
+                        <img src="{% static 'core/images/bg-shacman.png' %}" alt="{{ page.title }}" class="service-hero-image">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section service-intro-section">
+        <div class="service-intro-card">
+            {% if page.intro_title %}
+                <h2>{{ page.intro_title }}</h2>
+            {% endif %}
+
+            {% if page.intro_text %}
+                <p>{{ page.intro_text|linebreaksbr }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="content-section service-features-section">
+        <div class="section-heading">
+            <span class="section-label">Преимущества</span>
+            <h2>Почему выбирают нас</h2>
+        </div>
+
+        <div class="cards-grid cards-grid-3">
+            {% if page.feature_1_title or page.feature_1_text %}
+                <article class="info-card">
+                    {% if page.feature_1_title %}
+                        <h3>{{ page.feature_1_title }}</h3>
+                    {% endif %}
+                    {% if page.feature_1_text %}
+                        <p>{{ page.feature_1_text }}</p>
+                    {% endif %}
+                </article>
+            {% endif %}
+
+            {% if page.feature_2_title or page.feature_2_text %}
+                <article class="info-card">
+                    {% if page.feature_2_title %}
+                        <h3>{{ page.feature_2_title }}</h3>
+                    {% endif %}
+                    {% if page.feature_2_text %}
+                        <p>{{ page.feature_2_text }}</p>
+                    {% endif %}
+                </article>
+            {% endif %}
+
+            {% if page.feature_3_title or page.feature_3_text %}
+                <article class="info-card">
+                    {% if page.feature_3_title %}
+                        <h3>{{ page.feature_3_title }}</h3>
+                    {% endif %}
+                    {% if page.feature_3_text %}
+                        <p>{{ page.feature_3_text }}</p>
+                    {% endif %}
+                </article>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="content-section service-steps-section">
+        <div class="section-heading">
+            <span class="section-label">Этапы работы</span>
+            <h2>Как проходит оказание услуги</h2>
+        </div>
+
+        <div class="service-steps-grid">
+            {% if page.step_1_title or page.step_1_text %}
+                <article class="service-step-card">
+                    <div class="service-step-number">01</div>
+                    {% if page.step_1_title %}
+                        <h3>{{ page.step_1_title }}</h3>
+                    {% endif %}
+                    {% if page.step_1_text %}
+                        <p>{{ page.step_1_text }}</p>
+                    {% endif %}
+                </article>
+            {% endif %}
+
+            {% if page.step_2_title or page.step_2_text %}
+                <article class="service-step-card">
+                    <div class="service-step-number">02</div>
+                    {% if page.step_2_title %}
+                        <h3>{{ page.step_2_title }}</h3>
+                    {% endif %}
+                    {% if page.step_2_text %}
+                        <p>{{ page.step_2_text }}</p>
+                    {% endif %}
+                </article>
+            {% endif %}
+
+            {% if page.step_3_title or page.step_3_text %}
+                <article class="service-step-card">
+                    <div class="service-step-number">03</div>
+                    {% if page.step_3_title %}
+                        <h3>{{ page.step_3_title }}</h3>
+                    {% endif %}
+                    {% if page.step_3_text %}
+                        <p>{{ page.step_3_text }}</p>
+                    {% endif %}
+                </article>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="content-section" id="request">
+        <div class="request-block service-request-block">
+            <div class="request-content">
+                <span class="section-label section-label-light">Заявка</span>
+                {% if page.cta_title %}
+                    <h2>{{ page.cta_title }}</h2>
+                {% else %}
+                    <h2>Оставьте заявку на услугу</h2>
+                {% endif %}
+
+                {% if page.cta_text %}
+                    <p>{{ page.cta_text }}</p>
+                {% else %}
+                    <p>Свяжемся с вами, уточним параметры объекта и подготовим предложение.</p>
+                {% endif %}
+
+                {% if page.cta_button_text and page.cta_button_link %}
+                    <div class="service-inline-action">
+                        <a href="{{ page.cta_button_link }}" class="hero-btn hero-btn-primary">
+                            {{ page.cta_button_text }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</section>
+{% endblock %}
