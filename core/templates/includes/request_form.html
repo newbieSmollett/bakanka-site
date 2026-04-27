@@ -112,6 +112,28 @@
                     </div>
                 </div>
 
+<div class="field-wrap">
+    <label class="consent-check">
+        <input
+            type="checkbox"
+            name="personal_data_consent"
+            id="personal-data-consent"
+            {% if form_data.personal_data_consent %}checked{% endif %}
+            required
+        >
+        <span>
+            Я даю согласие на обработку персональных данных и подтверждаю, что ознакомлен с
+            <a href="/politika-konfidencialnosti/" target="_blank" rel="noopener">
+                политикой обработки персональных данных
+            </a>.
+        </span>
+    </label>
+
+    {% if form_errors.personal_data_consent %}
+        <div class="form-error">{{ form_errors.personal_data_consent }}</div>
+    {% endif %}
+</div>
+
                 <button type="submit" class="request-submit" id="lead-submit">
                     <span class="request-submit__label">Отправить заявку</span>
                     <span class="request-submit__spinner" aria-hidden="true"></span>

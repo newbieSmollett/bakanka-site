@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+{% load wagtailcore_tags %}
+
+{% block title %}
+    {% if page.seo_title_custom %}
+        {{ page.seo_title_custom }}
+    {% else %}
+        {{ page.title }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if page.seo_description %}
+        {{ page.seo_description }}
+    {% else %}
+        Политика обработки персональных данных
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="legal-page">
+    <div class="legal-page__card">
+        <div class="legal-page__badge">Документы сайта</div>
+
+        <h1>{{ page.title }}</h1>
+
+        <div class="legal-page__content">
+            {{ page.body|richtext }}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -68,10 +68,11 @@
     </main>
 
     <footer class="site-footer-wrap" id="contacts">
-        <div class="site-container">
-            <div class="site-footer">
-                <p>
-                    ©
+    <div class="site-container">
+        <div class="site-footer">
+            <div class="site-footer__main">
+                <p class="site-footer__company">
+                    © {% now "Y" %}
                     {% if settings.home.SiteContactSettings.company_name %}
                         {{ settings.home.SiteContactSettings.company_name }}
                     {% else %}
@@ -80,7 +81,19 @@
                 </p>
 
                 {% if settings.home.SiteContactSettings.address %}
-                    <p>{{ settings.home.SiteContactSettings.address }}</p>
+                    <p class="site-footer__address">
+                        {{ settings.home.SiteContactSettings.address }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <div class="site-footer__contacts">
+                {% if settings.home.SiteContactSettings.phone %}
+                    <p>
+                        <a href="tel:{{ settings.home.SiteContactSettings.phone }}">
+                            {{ settings.home.SiteContactSettings.phone }}
+                        </a>
+                    </p>
                 {% endif %}
 
                 {% if settings.home.SiteContactSettings.email %}
@@ -90,30 +103,16 @@
                         </a>
                     </p>
                 {% endif %}
-            </div>
-        </div>
-    </footer>
 
-    <div class="cookie-consent" id="cookie-consent">
-        <div class="cookie-consent__inner">
-            <div class="cookie-consent__content">
-                <div class="cookie-consent__title">Мы используем cookie</div>
-                <div class="cookie-consent__text">
-                    Сайт использует cookie-файлы для корректной работы, аналитики и улучшения пользовательского опыта.
-                    Продолжая пользоваться сайтом, вы соглашаетесь с их использованием.
-                </div>
-            </div>
-
-            <div class="cookie-consent__actions">
-                <button type="button" class="cookie-consent__btn cookie-consent__btn--ghost" id="cookie-decline">
-                    Только необходимые
-                </button>
-                <button type="button" class="cookie-consent__btn cookie-consent__btn--primary" id="cookie-accept">
-                    Принять
-                </button>
+                <p>
+                    <a href="/politika-konfidencialnosti/">
+                        Политика обработки персональных данных
+                    </a>
+                </p>
             </div>
         </div>
     </div>
+</footer>
 
     {% block extra_js %}
     <script>

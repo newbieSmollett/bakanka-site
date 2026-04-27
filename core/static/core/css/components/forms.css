@@ -138,3 +138,31 @@
     font-size: 14px;
     line-height: 1.45;
 }
+
+.consent-check {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.consent-check input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: #21c45d;
+}
+
+.consent-check a {
+    color: #ffffff;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.consent-check a:hover {
+    opacity: 0.85;
+}

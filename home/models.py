@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.shortcuts import render
+from django.utils import timezone
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
@@ -57,6 +58,21 @@ class Lead(models.Model):
     page_url = models.CharField(max_length=500, blank=True, verbose_name="URL страницы")
     ip_address = models.GenericIPAddressField(blank=True, null=True, verbose_name="IP-адрес")
     user_agent = models.TextField(blank=True, verbose_name="User-Agent")
+    consent_personal_data = models.BooleanField(
+        default=False,
+        verbose_name="Согласие на обработку ПДн",
+    )
+    consent_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Дата согласия",
+    )
+    consent_policy_version = models.CharField(
+        max_length=100,
+        blank=True,
+        default="policy_2026_04_27",
+        verbose_name="Версия политики",
+    )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_NEW, verbose_name="Статус")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
@@ -93,12 +109,14 @@ class LeadFormMixin:
         name = request.POST.get("name", "").strip()
         phone = request.POST.get("phone", "").strip()
         comment = request.POST.get("comment", "").strip()
+        personal_data_consent = request.POST.get("personal_data_consent") == "on"
 
         form_data = {
             "company": company,
             "name": name,
             "phone": phone,
             "comment": comment,
+            "personal_data_consent": personal_data_consent,
         }
 
         form_errors = {}
@@ -133,6 +151,10 @@ class LeadFormMixin:
         phone_digits = phone_digits[:11]
         normalized_phone = "+" + phone_digits
 
+        if not personal_data_consent:
+            form_errors["personal_data_consent"] = "Необходимо дать согласие на обработку персональных данных."
+ 
+
         lead = Lead.objects.create(
             company=company,
             name=name,
@@ -142,6 +164,9 @@ class LeadFormMixin:
             page_url=request.build_absolute_uri(),
             ip_address=get_client_ip(request),
             user_agent=request.META.get("HTTP_USER_AGENT", ""),
+            consent_personal_data=personal_data_consent,
+            consent_at=timezone.now() if personal_data_consent else None,
+            consent_policy_version="policy_2026_04_27",
         )
 
         subject = f"Новая заявка с сайта: {name}"
@@ -157,6 +182,8 @@ class LeadFormMixin:
             f"IP: {get_client_ip(request) or '—'}\n"
             f"User-Agent: {request.META.get('HTTP_USER_AGENT', '') or '—'}\n"
             f"ID заявки: {lead.id}\n"
+            f"Согласие на обработку ПДн: {'да' if personal_data_consent else 'нет'}\n"
+            f"Версия политики: policy_2026_04_27\n"
         )
 
         try:
@@ -288,16 +315,22 @@ class HomePage(LeadFormMixin, BasePage):
             FieldPanel("request_text"),
         ], heading="Блок заявки"),
     ]
-
+    
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        context["service_pages"] = (
-            self.get_children()
-            .live()
-            .public()
-            .specific()
-        )
+        try:
+            from services.models import ServicePage
+
+            context["service_pages"] = (
+                ServicePage.objects
+                .live()
+                .public()
+                .child_of(self)
+                .order_by("path")
+            )
+        except Exception:
+            context["service_pages"] = []
 
         return context
 

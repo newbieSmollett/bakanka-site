@@ -1,6 +1,8 @@
 from django.db import models
+
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
+from wagtail.fields import RichTextField
 
 
 class BasePage(Page):
@@ -40,3 +42,21 @@ class BasePage(Page):
 
     class Meta:
         abstract = True
+
+
+class LegalPage(BasePage):
+    parent_page_types = ["home.HomePage"]
+    subpage_types = []
+
+    body = RichTextField(
+        blank=True,
+        verbose_name="Текст страницы",
+    )
+
+    content_panels = BasePage.content_panels + [
+        FieldPanel("body"),
+    ]
+
+    class Meta:
+        verbose_name = "Юридическая страница"
+        verbose_name_plural = "Юридические страницы"
