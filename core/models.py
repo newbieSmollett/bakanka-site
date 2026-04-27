@@ -21,5 +21,22 @@ class BasePage(Page):
         FieldPanel("seo_description"),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        try:
+            from services.models import ServicePage
+
+            context["header_service_pages"] = (
+                ServicePage.objects
+                .live()
+                .public()
+                .order_by("path")
+            )
+        except Exception:
+            context["header_service_pages"] = []
+
+        return context
+
     class Meta:
         abstract = True

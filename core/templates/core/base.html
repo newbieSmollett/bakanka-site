@@ -26,13 +26,30 @@
                 </a>
 
                 <div class="site-header-controls">
-                    <nav class="site-nav" aria-label="Основная навигация">
-                        <a href="/">Главная</a>
-                        <a href="#services">Услуги</a>
-                        <a href="#">Цены</a>
-                        <a href="#about">О компании</a>
-                        <a href="#contacts">Контакты</a>
-                    </nav>
+                   <nav class="site-nav" aria-label="Основная навигация">
+    <a href="/">Главная</a>
+
+    <div class="site-nav-dropdown">
+        <a href="/#services" class="site-nav-dropdown__trigger">
+            Услуги
+            <span class="site-nav-dropdown__arrow">▾</span>
+        </a>
+
+        {% if header_service_pages %}
+            <div class="site-nav-dropdown__menu">
+                {% for service in header_service_pages %}
+                    <a href="{{ service.url }}" class="site-nav-dropdown__link">
+                        {{ service.title }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <a href="/#prices">Цены</a>
+    <a href="/#about">О компании</a>
+    <a href="/#contacts">Контакты</a>
+</nav>
 
                     {% if settings.home.SiteContactSettings.phone %}
                         <a href="tel:{{ settings.home.SiteContactSettings.phone }}" class="site-phone">
