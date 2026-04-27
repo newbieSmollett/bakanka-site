@@ -1,0 +1,126 @@
+<script>
+    window.addEventListener('load', function () {
+        const form = document.getElementById('lead-form');
+        const submitButton = document.getElementById('lead-submit');
+        const phoneInput = document.getElementById('lead-phone');
+
+        function formatPhone(value) {
+            let digits = value.replace(/\D/g, '');
+
+            if (!digits) {
+                return '';
+            }
+
+            if (digits[0] === '8') {
+                digits = '7' + digits.slice(1);
+            }
+
+            if (digits[0] !== '7') {
+                digits = '7' + digits;
+            }
+
+            digits = digits.slice(0, 11);
+
+            let result = '+7';
+
+            if (digits.length > 1) {
+                result += ' (' + digits.slice(1, 4);
+            }
+
+            if (digits.length >= 5) {
+                result += ') ' + digits.slice(4, 7);
+            }
+
+            if (digits.length >= 8) {
+                result += '-' + digits.slice(7, 9);
+            }
+
+            if (digits.length >= 10) {
+                result += '-' + digits.slice(9, 11);
+            }
+
+            return result;
+        }
+
+        function handlePhoneInput(event) {
+            event.target.value = formatPhone(event.target.value);
+        }
+
+        function handlePhoneFocus(event) {
+            if (!event.target.value.trim()) {
+                event.target.value = '+7';
+            }
+        }
+
+        function handlePhoneBlur(event) {
+            if (event.target.value === '+7') {
+                event.target.value = '';
+            }
+        }
+
+        function handlePhonePaste(event) {
+            event.preventDefault();
+            const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+            event.target.value = formatPhone(pastedText);
+        }
+
+        if (phoneInput) {
+            phoneInput.addEventListener('input', handlePhoneInput);
+            phoneInput.addEventListener('focus', handlePhoneFocus);
+            phoneInput.addEventListener('blur', handlePhoneBlur);
+            phoneInput.addEventListener('paste', handlePhonePaste);
+
+            if (phoneInput.value) {
+                phoneInput.value = formatPhone(phoneInput.value);
+            }
+        }
+
+        if (form && submitButton) {
+            form.addEventListener('submit', function () {
+                submitButton.classList.add('is-loading');
+                submitButton.disabled = true;
+
+                const label = submitButton.querySelector('.request-submit__label');
+
+                if (label) {
+                    label.textContent = 'Отправка...';
+                }
+            });
+        }
+
+        const modal = document.getElementById('lead-success-modal');
+        const closeButton = document.querySelector('.lead-modal__close');
+        const confirmButton = document.querySelector('.lead-modal__button');
+        const backdrop = document.querySelector('.lead-modal__backdrop');
+
+        if (modal) {
+            setTimeout(function () {
+                modal.classList.add('is-visible');
+            }, 500);
+        }
+
+        function closeModal() {
+            if (modal) {
+                modal.classList.remove('is-visible');
+            }
+        }
+
+        if (closeButton) {
+            closeButton.addEventListener('click', closeModal);
+        }
+
+        if (confirmButton) {
+            confirmButton.addEventListener('click', closeModal);
+        }
+
+        if (backdrop) {
+            backdrop.addEventListener('click', closeModal);
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    });
+</script>

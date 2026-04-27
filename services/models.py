@@ -1,12 +1,13 @@
 from django.db import models
-from django.db import models
 from wagtail.admin.panels import FieldPanel
 
+from core.models import BasePage
+from home.models import LeadFormMixin
 
-from home.models import BasePage
 
+class ServicePage(LeadFormMixin, BasePage):
+    lead_source = "service_page"
 
-class ServicePage(BasePage):
     parent_page_types = ["home.HomePage"]
     subpage_types = []
 
@@ -109,3 +110,6 @@ class ServicePage(BasePage):
         FieldPanel("cta_button_text"),
         FieldPanel("cta_button_link"),
     ]
+
+    class Meta:
+        verbose_name = "Страница услуги"

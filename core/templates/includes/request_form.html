@@ -1,0 +1,122 @@
+<section class="content-section" id="request">
+    <div class="request-block">
+        <div class="request-content">
+            <span class="section-label section-label-light">Заявка</span>
+
+            <h2>
+                {% if page.request_title %}
+                    {{ page.request_title }}
+                {% elif page.cta_title %}
+                    {{ page.cta_title }}
+                {% else %}
+                    Оставьте запрос на расчет
+                {% endif %}
+            </h2>
+
+            <p>
+                {% if page.request_text %}
+                    {{ page.request_text }}
+                {% elif page.cta_text %}
+                    {{ page.cta_text }}
+                {% else %}
+                    Подготовим предложение под тип отходов, объем работ, адрес объекта и формат взаимодействия.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="request-form-area">
+            <form class="request-form request-form-premium" method="post" novalidate id="lead-form">
+                {% csrf_token %}
+
+                <div class="field-wrap">
+                    <div class="field-shell">
+                        <input
+                            type="text"
+                            name="company"
+                            id="lead-company"
+                            placeholder=" "
+                            value="{{ form_data.company|default:'' }}"
+                            autocomplete="organization"
+                        >
+                        <label for="lead-company" class="field-label">Название компании</label>
+                        <span class="field-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M4 7h16M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field-wrap">
+                    <div class="field-shell">
+                        <input
+                            type="text"
+                            name="name"
+                            id="lead-name"
+                            placeholder=" "
+                            value="{{ form_data.name|default:'' }}"
+                            autocomplete="name"
+                        >
+                        <label for="lead-name" class="field-label">Контактное лицо</label>
+                        <span class="field-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 20a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+
+                    {% if form_errors.name %}
+                        <div class="form-error">{{ form_errors.name }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="field-wrap">
+                    <div class="field-shell">
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="lead-phone"
+                            placeholder=" "
+                            value="{{ form_data.phone|default:'' }}"
+                            autocomplete="tel"
+                            inputmode="tel"
+                            maxlength="18"
+                        >
+                        <label for="lead-phone" class="field-label">Телефон</label>
+                        <span class="field-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72l.36 2.57a2 2 0 0 1-.57 1.7L7.1 9.8a16 16 0 0 0 7.1 7.1l1.81-1.8a2 2 0 0 1 1.7-.57l2.57.36A2 2 0 0 1 22 16.92Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+
+                    {% if form_errors.phone %}
+                        <div class="form-error">{{ form_errors.phone }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="field-wrap">
+                    <div class="field-shell field-shell-textarea">
+                        <textarea
+                            name="comment"
+                            id="lead-comment"
+                            placeholder=" "
+                            autocomplete="off"
+                        >{{ form_data.comment|default:'' }}</textarea>
+                        <label for="lead-comment" class="field-label">Кратко опишите задачу</label>
+                        <span class="field-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M8 9h8M8 13h6M7 4h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-4l-3 3v-3H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit" class="request-submit" id="lead-submit">
+                    <span class="request-submit__label">Отправить заявку</span>
+                    <span class="request-submit__spinner" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

@@ -19,6 +19,7 @@
 
 {% block content %}
 <section class="service-page">
+
     <section class="service-hero-section">
         <div class="service-hero-grid">
             <div class="service-hero-content">
@@ -153,31 +154,13 @@
         </div>
     </section>
 
-    <section class="content-section" id="request">
-        <div class="request-block service-request-block">
-            <div class="request-content">
-                <span class="section-label section-label-light">Заявка</span>
-                {% if page.cta_title %}
-                    <h2>{{ page.cta_title }}</h2>
-                {% else %}
-                    <h2>Оставьте заявку на услугу</h2>
-                {% endif %}
+    {% include "includes/request_form.html" %}
+    {% include "includes/lead_success_modal.html" %}
 
-                {% if page.cta_text %}
-                    <p>{{ page.cta_text }}</p>
-                {% else %}
-                    <p>Свяжемся с вами, уточним параметры объекта и подготовим предложение.</p>
-                {% endif %}
-
-                {% if page.cta_button_text and page.cta_button_link %}
-                    <div class="service-inline-action">
-                        <a href="{{ page.cta_button_link }}" class="hero-btn hero-btn-primary">
-                            {{ page.cta_button_text }}
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </section>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {% include "includes/lead_form_scripts.html" %}
 {% endblock %}

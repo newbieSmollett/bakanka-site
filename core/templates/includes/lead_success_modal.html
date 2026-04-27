@@ -1,0 +1,23 @@
+{% if form_success %}
+<div class="lead-modal" id="lead-success-modal" role="dialog" aria-modal="true" aria-labelledby="lead-success-title">
+    <div class="lead-modal__backdrop"></div>
+
+    <div class="lead-modal__dialog">
+        <button class="lead-modal__close" type="button" aria-label="Закрыть уведомление">×</button>
+
+        <div class="lead-modal__badge">Заявка отправлена</div>
+
+        <h3 class="lead-modal__title" id="lead-success-title">
+            Спасибо, мы получили ваш запрос
+        </h3>
+
+        <p class="lead-modal__text">
+            Наш специалист свяжется с вами для уточнения деталей и подготовки предложения.
+        </p>
+
+        <div class="lead-modal__actions">
+            <button class="lead-modal__button" type="button">Понятно</button>
+        </div>
+    </div>
+</div>
+{% endif %}
