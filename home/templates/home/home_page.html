@@ -23,7 +23,7 @@
   "@context": "https://schema.org",
   "@type": ["Organization", "LocalBusiness"],
   "name": "{{ settings.home.SiteContactSettings.company_name|default:'ООО Баканка'|escapejs }}",
-  "url": "{{ request.scheme }}://{{ request.get_host }}{{ page.url }}",
+  "url": "{{ request.build_absolute_uri|escapejs }}",
   "telephone": "{{ settings.home.SiteContactSettings.phone|default:'+7 (999) 999-99-99'|escapejs }}",
   "email": "{{ settings.home.SiteContactSettings.email|default:'info@example.com'|escapejs }}",
   "address": {
@@ -124,19 +124,19 @@
                         </div>
 
                         <div class="haul-widget__stages">
-                            <div class="haul-widget__stage is-active" data-stage="0">
+                            <div class="haul-widget__stage is-active">
                                 <span class="haul-widget__dot"></span>
                                 <span class="haul-widget__text">Заявка</span>
                             </div>
-                            <div class="haul-widget__stage" data-stage="1">
+                            <div class="haul-widget__stage">
                                 <span class="haul-widget__dot"></span>
                                 <span class="haul-widget__text">Подбор техники</span>
                             </div>
-                            <div class="haul-widget__stage" data-stage="2">
+                            <div class="haul-widget__stage">
                                 <span class="haul-widget__dot"></span>
                                 <span class="haul-widget__text">Вывоз</span>
                             </div>
-                            <div class="haul-widget__stage" data-stage="3">
+                            <div class="haul-widget__stage">
                                 <span class="haul-widget__dot"></span>
                                 <span class="haul-widget__text">Документы</span>
                             </div>
@@ -146,7 +146,7 @@
                             <div class="haul-widget__road-line"></div>
                             <div class="haul-widget__progress"></div>
 
-                            <div class="haul-widget__truck" id="haul-truck" aria-hidden="true">
+                            <div class="haul-widget__truck" aria-hidden="true">
                                 <img
                                     src="{% static 'core/images/shacman-widget.png' %}"
                                     alt=""
@@ -174,65 +174,12 @@
 
 <section class="trust-strip-section">
     <div class="trust-strip">
-        <div class="trust-strip__item">
-            <span class="trust-strip__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M7 4h10l3 3v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M14 4v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span>Работаем с юридическими лицами</span>
-        </div>
-
-        <div class="trust-strip__item">
-            <span class="trust-strip__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M9.5 12.5l1.7 1.7 3.8-4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span>Договор и закрывающие документы</span>
-        </div>
-
-        <div class="trust-strip__item">
-            <span class="trust-strip__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M3 12h6l2-7 4 14 2-7h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span>Оперативный расчет заявки</span>
-        </div>
-
-        <div class="trust-strip__item">
-            <span class="trust-strip__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M3 16V8l9-4 9 4v8l-9 4-9-4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 4v16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span>Подбор решения под объект</span>
-        </div>
-
-        <div class="trust-strip__item">
-            <span class="trust-strip__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M3 16h13l3-5h2v5h-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M5.5 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM16.5 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M3 8h11v8H3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span>Собственный и привлеченный транспорт</span>
-        </div>
-
-        <div class="trust-strip__item">
-            <span class="trust-strip__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M12 21s7-4.35 7-10a7 7 0 1 0-14 0c0 5.65 7 10 7 10Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 13.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span>Новороссийск и Нижнебаканская</span>
-        </div>
+        <div class="trust-strip__item"><span>Работаем с юридическими лицами</span></div>
+        <div class="trust-strip__item"><span>Договор и закрывающие документы</span></div>
+        <div class="trust-strip__item"><span>Оперативный расчет заявки</span></div>
+        <div class="trust-strip__item"><span>Подбор решения под объект</span></div>
+        <div class="trust-strip__item"><span>Собственный и привлеченный транспорт</span></div>
+        <div class="trust-strip__item"><span>Новороссийск и Нижнебаканская</span></div>
     </div>
 </section>
 
@@ -277,9 +224,11 @@
     <div class="about-block">
         <div class="about-content">
             <span class="section-label">О компании</span>
+
             {% if page.about_title %}
                 <h2>{{ page.about_title }}</h2>
             {% endif %}
+
             {% if page.about_text %}
                 <p>{{ page.about_text }}</p>
             {% endif %}
@@ -323,35 +272,15 @@
 </section>
 
 {% include "includes/request_form.html" %}
-{% include "includes/lead_success_modal.html" %}
 
 {% if form_success %}
-<div class="lead-modal" id="lead-success-modal" role="dialog" aria-modal="true" aria-labelledby="lead-success-title">
-    <div class="lead-modal__backdrop"></div>
-
-    <div class="lead-modal__dialog">
-        <button class="lead-modal__close" type="button" aria-label="Закрыть уведомление">×</button>
-
-        <div class="lead-modal__badge">Заявка отправлена</div>
-
-        <h3 class="lead-modal__title" id="lead-success-title">
-            Спасибо, мы получили ваш запрос
-        </h3>
-
-        <p class="lead-modal__text">
-            Наш специалист свяжется с вами для уточнения деталей и подготовки предложения.
-        </p>
-
-        <div class="lead-modal__actions">
-            <button class="lead-modal__button" type="button">Понятно</button>
-        </div>
-    </div>
-</div>
+    {% include "includes/lead_success_modal.html" %}
 {% endif %}
 {% endblock %}
 
 {% block extra_js %}
     {{ block.super }}
+
     <script>
         window.addEventListener('load', function () {
             const form = document.getElementById('lead-form');
@@ -359,7 +288,7 @@
             const phoneInput = document.getElementById('lead-phone');
 
             function formatPhone(value) {
-                let digits = value.replace(/\D/g, '');
+                let digits = String(value || '').replace(/\D/g, '');
 
                 if (!digits) {
                     return '';
@@ -396,36 +325,29 @@
                 return result;
             }
 
-            function handlePhoneInput(event) {
-                const input = event.target;
-                input.value = formatPhone(input.value);
-            }
-
-            function handlePhoneFocus(event) {
-                const input = event.target;
-                if (!input.value.trim()) {
-                    input.value = '+7';
-                }
-            }
-
-            function handlePhoneBlur(event) {
-                const input = event.target;
-                if (input.value === '+7') {
-                    input.value = '';
-                }
-            }
-
-            function handlePhonePaste(event) {
-                event.preventDefault();
-                const pastedText = (event.clipboardData || window.clipboardData).getData('text');
-                event.target.value = formatPhone(pastedText);
-            }
-
             if (phoneInput) {
-                phoneInput.addEventListener('input', handlePhoneInput);
-                phoneInput.addEventListener('focus', handlePhoneFocus);
-                phoneInput.addEventListener('blur', handlePhoneBlur);
-                phoneInput.addEventListener('paste', handlePhonePaste);
+                phoneInput.addEventListener('input', function (event) {
+                    event.target.value = formatPhone(event.target.value);
+                });
+
+                phoneInput.addEventListener('focus', function (event) {
+                    if (!event.target.value.trim()) {
+                        event.target.value = '+7';
+                    }
+                });
+
+                phoneInput.addEventListener('blur', function (event) {
+                    if (event.target.value === '+7') {
+                        event.target.value = '';
+                    }
+                });
+
+                phoneInput.addEventListener('paste', function (event) {
+                    event.preventDefault();
+
+                    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+                    event.target.value = formatPhone(pastedText);
+                });
 
                 if (phoneInput.value) {
                     phoneInput.value = formatPhone(phoneInput.value);
@@ -434,10 +356,15 @@
 
             if (form && submitButton) {
                 form.addEventListener('submit', function () {
+                    if (!form.checkValidity()) {
+                        return;
+                    }
+
                     submitButton.classList.add('is-loading');
                     submitButton.disabled = true;
 
                     const label = submitButton.querySelector('.request-submit__label');
+
                     if (label) {
                         label.textContent = 'Отправка...';
                     }
@@ -450,7 +377,7 @@
                 let currentStage = 0;
 
                 function updateHaulStages() {
-                    haulStages.forEach((stage, index) => {
+                    haulStages.forEach(function (stage, index) {
                         stage.classList.toggle('is-active', index === currentStage);
                     });
 
@@ -461,42 +388,39 @@
                 setInterval(updateHaulStages, 2000);
             }
 
-            {% if form_success %}
             const modal = document.getElementById('lead-success-modal');
-            const closeButton = document.querySelector('.lead-modal__close');
-            const confirmButton = document.querySelector('.lead-modal__button');
-            const backdrop = document.querySelector('.lead-modal__backdrop');
 
             if (modal) {
+                const closeButton = modal.querySelector('.lead-modal__close');
+                const confirmButton = modal.querySelector('.lead-modal__button');
+                const backdrop = modal.querySelector('.lead-modal__backdrop');
+
                 setTimeout(function () {
                     modal.classList.add('is-visible');
                 }, 500);
-            }
 
-            function closeModal() {
-                if (modal) {
+                function closeModal() {
                     modal.classList.remove('is-visible');
                 }
-            }
 
-            if (closeButton) {
-                closeButton.addEventListener('click', closeModal);
-            }
-
-            if (confirmButton) {
-                confirmButton.addEventListener('click', closeModal);
-            }
-
-            if (backdrop) {
-                backdrop.addEventListener('click', closeModal);
-            }
-
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape') {
-                    closeModal();
+                if (closeButton) {
+                    closeButton.addEventListener('click', closeModal);
                 }
-            });
-            {% endif %}
+
+                if (confirmButton) {
+                    confirmButton.addEventListener('click', closeModal);
+                }
+
+                if (backdrop) {
+                    backdrop.addEventListener('click', closeModal);
+                }
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        closeModal();
+                    }
+                });
+            }
         });
     </script>
-{% endblock %} 
+{% endblock %}
