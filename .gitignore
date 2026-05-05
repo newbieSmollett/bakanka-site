@@ -22,8 +22,11 @@ staticfiles/
 # Transfer / backup files
 data.json
 data_*.json
+data.*.json
 *.tar.gz
 *.zip
+*.backup
+*.postgres_backup
 
 # Logs
 *.log
