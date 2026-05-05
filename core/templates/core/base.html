@@ -26,30 +26,30 @@
                 </a>
 
                 <div class="site-header-controls">
-                   <nav class="site-nav" aria-label="Основная навигация">
-    <a href="/">Главная</a>
+                    <nav class="site-nav" aria-label="Основная навигация">
+                        <a href="/">Главная</a>
 
-    <div class="site-nav-dropdown">
-        <a href="/#services" class="site-nav-dropdown__trigger">
-            Услуги
-            <span class="site-nav-dropdown__arrow">▾</span>
-        </a>
+                        <div class="site-nav-dropdown">
+                            <a href="/#services" class="site-nav-dropdown__trigger">
+                                Услуги
+                                <span class="site-nav-dropdown__arrow">▾</span>
+                            </a>
 
-        {% if header_service_pages %}
-            <div class="site-nav-dropdown__menu">
-                {% for service in header_service_pages %}
-                    <a href="{{ service.url }}" class="site-nav-dropdown__link">
-                        {{ service.title }}
-                    </a>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+                            {% if header_service_pages %}
+                                <div class="site-nav-dropdown__menu">
+                                    {% for service in header_service_pages %}
+                                        <a href="{{ service.url }}" class="site-nav-dropdown__link">
+                                            {{ service.title }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
 
-    <a href="/#prices">Цены</a>
-    <a href="/#about">О компании</a>
-    <a href="/#contacts">Контакты</a>
-</nav>
+                        <a href="/#prices">Цены</a>
+                        <a href="/#about">О компании</a>
+                        <a href="/#contacts">Контакты</a>
+                    </nav>
 
                     {% if settings.home.SiteContactSettings.phone %}
                         <a href="tel:{{ settings.home.SiteContactSettings.phone }}" class="site-phone">
@@ -68,51 +68,85 @@
     </main>
 
     <footer class="site-footer-wrap" id="contacts">
-    <div class="site-container">
-        <div class="site-footer">
-            <div class="site-footer__main">
-                <p class="site-footer__company">
-                    © {% now "Y" %}
-                    {% if settings.home.SiteContactSettings.company_name %}
-                        {{ settings.home.SiteContactSettings.company_name }}
-                    {% else %}
-                        Прием и утилизация отходов в Новороссийске
+        <div class="site-container">
+            <div class="site-footer">
+                <div class="site-footer__main">
+                    <p class="site-footer__company">
+                        © {% now "Y" %}
+                        {% if settings.home.SiteContactSettings.company_name %}
+                            {{ settings.home.SiteContactSettings.company_name }}
+                        {% else %}
+                            Прием и утилизация отходов в Новороссийске
+                        {% endif %}
+                    </p>
+
+                    {% if settings.home.SiteContactSettings.address %}
+                        <p class="site-footer__address">
+                            {{ settings.home.SiteContactSettings.address }}
+                        </p>
                     {% endif %}
+                </div>
+
+                <div class="site-footer__contacts">
+                    {% if settings.home.SiteContactSettings.phone %}
+                        <p>
+                            <a href="tel:{{ settings.home.SiteContactSettings.phone }}">
+                                {{ settings.home.SiteContactSettings.phone }}
+                            </a>
+                        </p>
+                    {% endif %}
+
+                    {% if settings.home.SiteContactSettings.email %}
+                        <p>
+                            <a href="mailto:{{ settings.home.SiteContactSettings.email }}">
+                                {{ settings.home.SiteContactSettings.email }}
+                            </a>
+                        </p>
+                    {% endif %}
+
+                    <p>
+                        <a href="/politika-konfidencialnosti/">
+                            Политика обработки персональных данных
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="cookie-consent" class="cookie-consent" hidden>
+        <div class="cookie-consent__inner">
+            <div class="cookie-consent__content">
+                <p class="cookie-consent__title">
+                    Мы используем cookie
                 </p>
 
-                {% if settings.home.SiteContactSettings.address %}
-                    <p class="site-footer__address">
-                        {{ settings.home.SiteContactSettings.address }}
-                    </p>
-                {% endif %}
+                <p class="cookie-consent__text">
+                    Сайт использует файлы cookie для корректной работы, анализа посещаемости
+                    и улучшения сервиса. Продолжая пользоваться сайтом, вы соглашаетесь
+                    с использованием cookie.
+                </p>
             </div>
 
-            <div class="site-footer__contacts">
-                {% if settings.home.SiteContactSettings.phone %}
-                    <p>
-                        <a href="tel:{{ settings.home.SiteContactSettings.phone }}">
-                            {{ settings.home.SiteContactSettings.phone }}
-                        </a>
-                    </p>
-                {% endif %}
+            <div class="cookie-consent__actions">
+                <button
+                    type="button"
+                    id="cookie-decline"
+                    class="cookie-consent__btn cookie-consent__btn--ghost"
+                >
+                    Только необходимые
+                </button>
 
-                {% if settings.home.SiteContactSettings.email %}
-                    <p>
-                        <a href="mailto:{{ settings.home.SiteContactSettings.email }}">
-                            {{ settings.home.SiteContactSettings.email }}
-                        </a>
-                    </p>
-                {% endif %}
-
-                <p>
-                    <a href="/politika-konfidencialnosti/">
-                        Политика обработки персональных данных
-                    </a>
-                </p>
+                <button
+                    type="button"
+                    id="cookie-accept"
+                    class="cookie-consent__btn cookie-consent__btn--primary"
+                >
+                    Принять
+                </button>
             </div>
         </div>
     </div>
-</footer>
 
     {% block extra_js %}
     <script>
